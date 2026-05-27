@@ -173,4 +173,143 @@ export default {
                 </div>
 
                 <div class="p-5 overflow-y-auto space-y-3 pb-24">
-                    <button onclick="processPayment('cards')" class="w-full text-left bg-slate-800/30 border border-slate-800 rounded-xl p-4 hover:
+                    <button onclick="processPayment('cards')" class="w-full text-left bg-slate-800/30 border border-slate-800 rounded-xl p-4 hover:border-blue-500 transition-all group">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xl">💳</span>
+                                <span class="font-black text-gray-100 group-hover:text-blue-400 transition-colors text-sm uppercase tracking-wide">Universal Cards</span>
+                            </div>
+                            <span class="text-gray-600 font-bold">➔</span>
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <span class="bg-white/5 border border-slate-700 rounded px-1.5 py-0.5 text-[9px] font-bold text-gray-400">VISA</span>
+                            <span class="bg-white/5 border border-slate-700 rounded px-1.5 py-0.5 text-[9px] font-bold text-gray-400">MASTERCARD</span>
+                            <span class="bg-white/5 border border-slate-700 rounded px-1.5 py-0.5 text-[9px] font-bold text-gray-400">AMEX</span>
+                        </div>
+                    </button>
+
+                    <button onclick="processPayment('upi')" class="w-full text-left bg-slate-800/30 border border-slate-800 rounded-xl p-4 hover:border-emerald-500 transition-all group">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xl">📱</span>
+                                <span class="font-black text-gray-100 group-hover:text-emerald-400 transition-colors text-sm uppercase tracking-wide">UPI Auto-Sync</span>
+                            </div>
+                            <span class="text-gray-600 font-bold">➔</span>
+                        </div>
+                        <p class="text-[10px] text-blue-400 font-bold mt-2">Zero fees via direct banking tunnel (GPay/PhonePe)</p>
+                    </button>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="processPayment('emi')" class="bg-slate-800/30 border border-slate-800 rounded-xl p-3 hover:border-blue-500 transition-all text-center">
+                            <span class="text-lg block mb-1">🔄</span><span class="text-[9px] font-black text-gray-300 uppercase">EMI</span>
+                        </button>
+                        <button onclick="processPayment('netbanking')" class="bg-slate-800/30 border border-slate-800 rounded-xl p-3 hover:border-blue-500 transition-all text-center">
+                            <span class="text-lg block mb-1">🏦</span><span class="text-[9px] font-black text-gray-300 uppercase">Netbank</span>
+                        </button>
+                        <button onclick="processPayment('wallet')" class="bg-slate-800/30 border border-slate-800 rounded-xl p-3 hover:border-blue-500 transition-all text-center">
+                            <span class="text-lg block mb-1">👛</span><span class="text-[9px] font-black text-gray-300 uppercase">Wallets</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-0 w-full bg-slate-950 border-t border-slate-800 p-4 text-center">
+                    <p class="text-[10px] text-gray-600 font-bold uppercase tracking-widest flex items-center justify-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> 256-Bit SSL Secured by SupremeHost
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Advanced Anti-Bot Protection (Blocks Right Click & F12)
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.onkeydown = function(e) { if(e.keyCode == 123) return false; }
+
+            // PWA ENGINE REGISTER
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault(); deferredPrompt = e;
+                document.getElementById('installCard').classList.remove('hidden');
+            });
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') document.getElementById('installCard').classList.add('hidden');
+                    deferredPrompt = null;
+                }
+            });
+            if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
+
+            // CORE SEARCH INFRASTRUCTURE
+            let currentAction = "";
+            async function search() {
+                const domain = document.getElementById('domainInput').value;
+                const btnSearch = document.querySelector('button[onclick="search()"]');
+                if(!domain) return;
+                
+                btnSearch.innerText = "Analyzing...";
+                btnSearch.classList.add('opacity-60');
+                
+                const res = await fetch('/api/search?domain=' + domain + '&' + new URLSearchParams(window.location.search));
+                const data = await res.json();
+                
+                document.getElementById('resDomain').innerText = data.domain;
+                document.getElementById('resValuation').innerText = data.valuation;
+                document.getElementById('resDiscount').innerText = data.discount || "";
+                document.getElementById('resOriginal').innerText = data.originalPrice || "";
+                document.getElementById('resPrice').innerText = data.price;
+                document.getElementById('resNote').innerText = data.note || "";
+                
+                const btn = document.getElementById('resBtn');
+                btn.innerText = data.action;
+                currentAction = data.action;
+                
+                document.getElementById('resultCard').classList.remove('hidden');
+                btnSearch.innerText = "Analyze";
+                btnSearch.classList.remove('opacity-60');
+            }
+
+            // MILITARY GRADE ENCRYPTION ANIMATION LAYER
+            document.getElementById('resBtn').addEventListener('click', () => {
+                if(currentAction === "Buy Now") {
+                    const aiModal = document.getElementById('aiProcessModal');
+                    const statusText = document.getElementById('aiStatusText');
+                    const progressBar = document.getElementById('aiProgressBar');
+                    
+                    aiModal.classList.remove('hidden');
+                    
+                    const steps = [
+                        { text: "🧠 AI Valuation & Threat Analysis...", progress: "25%" },
+                        { text: "🛡️ Securing Connection to Global Node...", progress: "50%" },
+                        { text: "🔀 Bypassing Regional Restrictions...", progress: "85%" },
+                        { text: "✅ Encrypted Gateway Ready.", progress: "100%" }
+                    ];
+                    
+                    let currentStep = 0;
+                    const interval = setInterval(() => {
+                        if(currentStep < steps.length) {
+                            statusText.innerText = steps[currentStep].text;
+                            progressBar.style.width = steps[currentStep].progress;
+                            currentStep++;
+                        } else {
+                            clearInterval(interval);
+                            aiModal.classList.add('hidden');
+                            document.getElementById('paymentModal').classList.remove('hidden');
+                        }
+                    }, 800);
+
+                } else if(currentAction === "Deploy Now") {
+                    alert("👑 CEO VIP ACCESS GRANTED. Master Node Synced.");
+                }
+            });
+
+            function closeModal() { document.getElementById('paymentModal').classList.add('hidden'); }
+            function processPayment(method) { alert("Redirecting to Encrypted " + method.toUpperCase() + " Tunnel..."); }
+        </script>
+    </body>
+    </html>`;
+
+    return new Response(html, { headers: secureHeaders });
+  }
+};
