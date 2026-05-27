@@ -2,7 +2,7 @@ export default {
   async fetch(request) {
     const url = new URL(request.url);
 
-    // ======== API & ALERT SYSTEM ========
+    // ======== 1. API BACKEND & TELEGRAM ALERT ========
     if (url.pathname === "/api/search") {
         const domainQuery = url.searchParams.get("domain");
         const authCode = url.searchParams.get("token");
@@ -10,6 +10,7 @@ export default {
         const headers = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
         if (!domainQuery) return new Response(JSON.stringify({ error: "Domain required" }), { status: 400, headers });
 
+        // 👑 CEO VIP GATE (Code: 1218)
         if (authCode === "1218") {
           return new Response(JSON.stringify({
             status: "success", domain: domainQuery, availability: "CEO Access Verified",
@@ -17,6 +18,7 @@ export default {
           }), { headers });
         }
 
+        // 🚨 TELEGRAM ALERT
         const TELEGRAM_BOT_TOKEN = "8767785950:AAHheFCpC-L6Si26F4GOwBeL6HSOo5fMlTQ"; 
         const TELEGRAM_CHAT_ID = "1415524916";
         const text = `🚨 VORTEX GLOBAL ALERT 🚨\n\n🎯 Target: ${domainQuery}\n💰 Price: $19.99`;
@@ -29,12 +31,12 @@ export default {
         }), { headers });
     }
 
-    // ======== FRONTEND WEBSITE ========
+    // ======== 2. FRONTEND WEBSITE (UI) ========
     const html = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>Supreme Tech | VORTEX</title>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
@@ -68,6 +70,8 @@ export default {
     </body>
     </html>`;
 
-    return new Response(html, { headers: { "Content-Type": "text/html;charset=UTF-8" } });
+    return new Response(html, {
+      headers: { "Content-Type": "text/html;charset=UTF-8" }
+    });
   }
 };
